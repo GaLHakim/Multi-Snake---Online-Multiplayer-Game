@@ -11,8 +11,8 @@ public class Booster : MonoBehaviour
     public bool boosting = false;
     public float time;
 
-    public float baseSpeed = 1.0f;
-    public float speedBoost = 2.0f;
+    public float baseSpeed;
+    public float speedBoost;
     public float speed;
 
     // Use this for initialization
@@ -23,29 +23,17 @@ public class Booster : MonoBehaviour
         speed = baseSpeed;
     }
 
-    void movePlayer()
+    public void movePlayer()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && !boosting && Time.time > currentBoostDelayTime)
+        if (/*Input.GetKeyDown(KeyCode.Q) && */!boosting && Time.time > currentBoostDelayTime)
         {
             currentBoostTime = Time.time + boostTime;
             boosting = true;
         }
 
-        if ((Time.time > currentBoostTime) && boosting)
-        {
-            boosting = false;
-            currentBoostDelayTime = Time.time + boostDelayTime;
-        }
-
         if (boosting)
         {
             speed = speedBoost;
-
-        }
-
-        if (!boosting)
-        {
-            speed = baseSpeed;
 
         }
     }
@@ -55,6 +43,16 @@ public class Booster : MonoBehaviour
     void Update()
     {
         time = Time.time;
-        movePlayer();
+        //movePlayer();
+        if ((Time.time > currentBoostTime) && boosting)
+        {
+            boosting = false;
+            currentBoostDelayTime = Time.time + boostDelayTime;
+        }
+        if (!boosting)
+        {
+            speed = baseSpeed;
+
+        }
     }
 }
