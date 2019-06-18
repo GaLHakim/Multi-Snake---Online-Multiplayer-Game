@@ -51,7 +51,7 @@ public class LobbyController : MonoBehaviourPunCallbacks
         yield return new WaitForSeconds(1f);
 
         int randomRoomName = Random.Range(0, 10000);
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 2 };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
         PhotonNetwork.CreateRoom("Room" + randomRoomName, roomOps);
     }
 
@@ -64,6 +64,6 @@ public class LobbyController : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         Debug.Log("Join Room");
-        PhotonNetwork.LoadLevel(1);
+        //PhotonNetwork.LoadLevel(1);
     }
 }

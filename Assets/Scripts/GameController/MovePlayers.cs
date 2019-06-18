@@ -7,6 +7,7 @@ public class MovePlayers : MonoBehaviour
 {
     private PhotonView PV;
     private CharacterController myCC;
+    private float xScale = 6f, yScale = 6f;
     //private float speed;
     public float moveSpeed;
    
@@ -28,7 +29,9 @@ public class MovePlayers : MonoBehaviour
     {
         if (PV.IsMine)
         {
+            transform.localScale = new Vector3(xScale, yScale, 0);
             BasicMovement();
+            BasicScale();
         }
         //float moveHorizontal = Input.GetAxis("Horizontal");
         //float moveVertical = Input.GetAxis("Vertical");
@@ -67,6 +70,15 @@ public class MovePlayers : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             myCC.Move(-transform.right * Time.deltaTime * moveSpeed);
+        }
+    }
+
+    void BasicScale()
+    {
+        if (Input.GetKey(KeyCode.X))
+        {
+            xScale += 1f;
+            yScale += 1f;
         }
     }
 

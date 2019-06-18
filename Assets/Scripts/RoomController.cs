@@ -69,13 +69,18 @@ public class RoomController : MonoBehaviourPunCallbacks, IInRoomCallbacks
         currentScene = scene.buildIndex;
         if(currentScene == multiplayerScene)
         {
-            //CreatePlayer();
+            //if (PhotonNetwork.IsMasterClient)
+            //{
+            //    CreatePlayer();
+            //}
+            //else{}
+            CreatePlayer();
         }
     }
 
-    /*private void CreatePlayer()
+    private void CreatePlayer()
     {
         PhotonNetwork.Instantiate(Path.Combine("PrefabController", "Player"),
             transform.position, Quaternion.identity, 0);
-    }*/
+    }
 }
