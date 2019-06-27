@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Beam
+  - Boost
+  - Master
+  - Client
   layers:
   - Default
   - TransparentFX

@@ -34,7 +34,6 @@ public class Booster : MonoBehaviour
         if (boosting)
         {
             speed = speedBoost;
-
         }
     }
 

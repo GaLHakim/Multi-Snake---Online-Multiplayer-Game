@@ -32,10 +32,10 @@ public class LobbyController : MonoBehaviourPunCallbacks
 
     public void OnPlayButtonClicked()
     {
-        Debug.Log("Click To Join");
+        Debug.Log("Click To Play");
         PhotonNetwork.JoinRandomRoom();
 
-        StartCoroutine(CreateRoom());
+        //StartCoroutine(CreateRoom());
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -44,26 +44,26 @@ public class LobbyController : MonoBehaviourPunCallbacks
         CreateRoom();
     }
 
-    IEnumerator CreateRoom()
+    /*IEnumerator*/ void CreateRoom()
     {
         Debug.Log("Create Room");
 
-        yield return new WaitForSeconds(1f);
+        //yield return new WaitForSeconds(2f);
 
         int randomRoomName = Random.Range(0, 10000);
-        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
+        RoomOptions roomOps = new RoomOptions() { IsVisible = true, IsOpen = true, MaxPlayers = 2 };
         PhotonNetwork.CreateRoom("Room" + randomRoomName, roomOps);
-    }
-
-    public override void OnCreateRoomFailed(short returnCode, string message)
-    {
-        Debug.Log("Failed Create New Room");
-        CreateRoom();
     }
 
     public override void OnJoinedRoom()
     {
         Debug.Log("Join Room");
         //PhotonNetwork.LoadLevel(1);
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.Log("Failed Create New Room");
+        CreateRoom();
     }
 }

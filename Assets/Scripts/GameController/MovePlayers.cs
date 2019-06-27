@@ -6,90 +6,110 @@ using Photon.Pun;
 public class MovePlayers : MonoBehaviour
 {
     private PhotonView PV;
-    private CharacterController myCC;
     private float xScale = 6f, yScale = 6f;
-    //private float speed;
-    public float moveSpeed;
-   
+    public SpawnFood spawnFood;
+    Joystick joy;
+    Booster boost;
+    private float moveSpeed;
+
+    WinPlayer1 win1;
+    WinPlayer2 win2;
+
+    public GameSetup gameSet;
 
     void Start()
     {
         PV = GetComponent<PhotonView>();
-        myCC = GetComponent<CharacterController>();
+        spawnFood = GetComponent<SpawnFood>();
+        joy = FindObjectOfType<Joystick>();
+        boost = FindObjectOfType<Booster>();
+        gameSet = FindObjectOfType<GameSetup>();
+        win1 = FindObjectOfType<WinPlayer1>();
+        win2 = FindObjectOfType<WinPlayer2>();
 
-        //Booster b = FindObjectOfType<Booster>();
-        //speed = b.speed;
+        Debug.Log(gameSet.Master.tag.ToString());
+        Debug.Log(PhotonNetwork.IsMasterClient.ToString());
     }
-    //public VJHandler jsMovement;
-
-    //private Vector3 direction;
-    //private float xMin, xMax, yMin, yMax;
 
     void Update()
     {
         if (PV.IsMine)
         {
+            moveSpeed = 0.02f;
+            //boost.baseSpeed = 0.02f;
             transform.localScale = new Vector3(xScale, yScale, 0);
             BasicMovement();
-            BasicScale();
+            //BasicScale();
         }
-        //float moveHorizontal = Input.GetAxis("Horizontal");
-        //float moveVertical = Input.GetAxis("Vertical");
-
-        //Vector3 movement = new Vector3(moveHorizontal, moveVertical);
-        //transform.position += movement * moveSpeed;
-        //direction = jsMovement.InputDirection;
-
-        //if (direction.magnitude != 0)
-        //{
-        //    transform.position += direction* moveSpeed.speed;
-        //    transform.position = new Vector3(Mathf.Clamp(transform.position.x, xMin, xMax), Mathf.Clamp(transform.position.y, yMin, yMax),0f);
-        //}
     }
 
     void BasicMovement()
     {
         //float moveHorizontal = Input.GetAxis("Horizontal");
         //float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = joy.Horizontal;
+        float moveVertical = joy.Vertical;
 
-        //Vector3 movement = new Vector3(moveHorizontal, moveVertical);
-        //transform.position += movement * moveSpeed;
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            myCC.Move(transform.up * Time.deltaTime * moveSpeed);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            myCC.Move(-transform.up * Time.deltaTime * moveSpeed);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            myCC.Move(transform.right * Time.deltaTime * moveSpeed);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            myCC.Move(-transform.right * Time.deltaTime * moveSpeed);
-        }
+        Vector3 movement = new Vector3(moveHorizontal, moveVertical);
+        transform.position += movement * moveSpeed/*boost.speed*/;
     }
 
-    void BasicScale()
+    void OnTriggerEnter2D(Collider2D e)
     {
-        if (Input.GetKey(KeyCode.X))
+        if (PhotonNetwork.IsMasterClient)
         {
-            xScale += 1f;
-            yScale += 1f;
+
+            if (e.gameObject.tag == "Client") {
+                if (gameSet.playerHealthMaster > gameSet.playerHealthClient)
+                {
+                    Debug.Log("Master Menang");
+                    win1.panel1.SetActive(true);
+                }
+                else if (gameSet.playerHealthMaster < gameSet.playerHealthClient)
+                {
+                    Debug.Log("Client Menang");
+                    win2.panel2.SetActive(true);
+                }
+            }
+
+           
+        }
+        else {
+
+            if (e.gameObject.tag == "Master") {
+
+                if (gameSet.playerHealthClient > gameSet.playerHealthMaster)
+                {
+                    Debug.Log("Client Menang");
+                    win2.panel2.SetActive(true);
+                }
+                else if (gameSet.playerHealthClient < gameSet.playerHealthMaster)
+                {
+                    Debug.Log("Master Menang");
+                    win1.panel1.SetActive(true);
+                }
+            }
         }
     }
 
-    //void Start(){
 
-    //	xMax = 16.86f;
-    //	xMin = -16.86f; 
-    //	yMax = 16.86f;
-    //	yMin = -16.86f;
+
+    //[PunRPC]
+    //public void RPC_DestroyMaster()
+    //{
+    //    Debug.Log("Master Des");
+    //    Destroy(gameSet.Master);
+    //    Debug.Log(gameSet.Master.tag.ToString() + " Destroyed");
     //}
 
+
+    //[PunRPC]
+    //public void RPC_DestroyClient()
+    //{
+    //    Debug.Log("Client Des");
+    //    Destroy(gameSet.Client);
+    //    Debug.Log(gameSet.Client.tag.ToString() + "Destroyed");
+    //}
     //public float speed;
     //void FixedUpdate()
     //{

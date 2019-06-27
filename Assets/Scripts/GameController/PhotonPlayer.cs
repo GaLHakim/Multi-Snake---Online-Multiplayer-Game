@@ -12,6 +12,8 @@ public class PhotonPlayer : MonoBehaviourPun
 
     void Start()
     {
+
+
         PV = GetComponent<PhotonView>();
         int spawnPicker = Random.Range(0, GameSetup.GS.spawnPoints.Length);
         if (PV.IsMine)
@@ -19,7 +21,6 @@ public class PhotonPlayer : MonoBehaviourPun
             myAvatar = PhotonNetwork.Instantiate(Path.Combine("PrefabController", "PlayerAvatar"),
                 GameSetup.GS.spawnPoints[spawnPicker].position, GameSetup.GS.spawnPoints[spawnPicker].rotation);
         }
-
         /*if (PhotonNetwork.IsMasterClient)
         {
             myAvatar = PhotonNetwork.Instantiate(Path.Combine("PrefabController", "PlayerAvatar"),
@@ -33,8 +34,12 @@ public class PhotonPlayer : MonoBehaviourPun
         }*/
     }
 
+    //private void CreateSpawn()
+    //{
+    //    PhotonNetwork.Instantiate("SpawnObject", new Vector3(0, 0, 0), Quaternion.identity, 0);
+    //}
+
     void Update()
     {
-        
     }
 }

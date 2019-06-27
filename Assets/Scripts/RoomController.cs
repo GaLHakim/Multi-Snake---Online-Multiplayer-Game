@@ -74,13 +74,13 @@ public class RoomController : MonoBehaviourPunCallbacks, IInRoomCallbacks
             //    CreatePlayer();
             //}
             //else{}
-            CreatePlayer();
+            //CreatePlayer();
         }
     }
 
-    private void CreatePlayer()
-    {
-        PhotonNetwork.Instantiate(Path.Combine("PrefabController", "Player"),
-            transform.position, Quaternion.identity, 0);
-    }
+    //private void CreatePlayer()
+    //{
+    //    PhotonNetwork.Instantiate(Path.Combine("PrefabController", "Player"),
+    //        transform.position, Quaternion.identity, 0);
+    //}
 }

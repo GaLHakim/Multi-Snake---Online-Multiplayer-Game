@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class SpawnFood : MonoBehaviour
 {
+    private PhotonView PV;
     public GameObject FoodPrefab;
 
     public Vector3 center;
     public Vector3 size;
+    public Vector3 pos;
 
     public float spawnDelay;
     public float spawnTime;
@@ -18,27 +19,32 @@ public class SpawnFood : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnObjects();
+        PV = GetComponent<PhotonView>();
         time = spawnDelay;
     }
 
     // Update is called once per frame
     void Update()
     {
-        time -= spawnTime * Time.deltaTime;
-        if (time <= 0)
+        if (PV.IsMine)
         {
-            SpawnObjects();
-            time = spawnDelay;
-
+            time -= spawnTime * Time.deltaTime;
+            if (time <= 0)
+            {
+                GameObject temp = GameObject.Find("Food");
+                PV.RPC("RPC_SpawnObjects", RpcTarget.All);
+                time = spawnDelay;
+                PhotonNetwork.Destroy(temp);
+            }
         }
     }
 
-    public void SpawnObjects()
+    [PunRPC]
+    void RPC_SpawnObjects()
     {
-        Vector3 pos = center + new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y));
-
-        Instantiate(FoodPrefab, pos, Quaternion.identity);
+        pos = new Vector3(Random.Range(-size.x / 2, size.x / 2), Random.Range(-size.y / 2, size.y / 2));
+        GameObject temp = PhotonNetwork.Instantiate("Food", pos, Quaternion.identity);
+        temp.name = "Food";
     }
 
     void OnDrawGizmosSelected()

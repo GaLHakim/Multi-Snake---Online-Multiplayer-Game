@@ -32,5 +32,13 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
+  - RPC_SpawnObjects
+  - OnTriggerEnter2D
+  - RPC_Destroy
+  - RPC_DestroyClient
+  - RPC_DestroyMaster
+  - addHealth
+  - addHealthClient
+  - addHealthMaster
   DisableAutoOpenWizard: 1
   ShowSettings: 1
