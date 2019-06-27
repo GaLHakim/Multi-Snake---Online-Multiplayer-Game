@@ -1,31 +1,31 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Photon.Pun;
+using UnityEngine.UI;
+using System;
 //using UnityStandardAssets;
 
 public class MovePlayers : MonoBehaviour
 {
     private PhotonView PV;
-    private float xScale = 6f, yScale = 6f;
+    public float xScale = 6f, yScale = 6f;
     public SpawnFood spawnFood;
     Joystick joy;
     Booster boost;
     private float moveSpeed;
 
-    WinPlayer1 win1;
-    WinPlayer2 win2;
+    string master, client;
 
     public GameSetup gameSet;
 
     void Start()
     {
+  
         PV = GetComponent<PhotonView>();
         spawnFood = GetComponent<SpawnFood>();
         joy = FindObjectOfType<Joystick>();
         boost = FindObjectOfType<Booster>();
         gameSet = FindObjectOfType<GameSetup>();
-        win1 = FindObjectOfType<WinPlayer1>();
-        win2 = FindObjectOfType<WinPlayer2>();
 
         Debug.Log(gameSet.Master.tag.ToString());
         Debug.Log(PhotonNetwork.IsMasterClient.ToString());
@@ -58,38 +58,51 @@ public class MovePlayers : MonoBehaviour
     {
         if (PhotonNetwork.IsMasterClient)
         {
-
             if (e.gameObject.tag == "Client") {
                 if (gameSet.playerHealthMaster > gameSet.playerHealthClient)
                 {
                     Debug.Log("Master Menang");
-                    win1.panel1.SetActive(true);
+                    master = "Master Win";
+                    PV.RPC("MasterCondition", RpcTarget.All, master);
                 }
                 else if (gameSet.playerHealthMaster < gameSet.playerHealthClient)
                 {
-                    Debug.Log("Client Menang");
-                    win2.panel2.SetActive(true);
+                    Debug.Log("Master Kalah");
+                    client = "Client Win";
+                    PV.RPC("ClientCondition", RpcTarget.All, client);
                 }
             }
-
-           
         }
-        else {
-
-            if (e.gameObject.tag == "Master") {
-
+        else
+        {
+            if (e.gameObject.tag == "Master")
+            {
                 if (gameSet.playerHealthClient > gameSet.playerHealthMaster)
                 {
                     Debug.Log("Client Menang");
-                    win2.panel2.SetActive(true);
+                    client = "Client Win";
+                    PV.RPC("ClientCondition", RpcTarget.All, client);
                 }
                 else if (gameSet.playerHealthClient < gameSet.playerHealthMaster)
                 {
                     Debug.Log("Master Menang");
-                    win1.panel1.SetActive(true);
+                    master = "Master Win";
+                    PV.RPC("MasterCondition", RpcTarget.All, master);
                 }
             }
         }
+    }
+
+    [PunRPC]
+    public void MasterCondition(string a)
+    {
+        gameSet.TextMaster(a);
+    }
+
+    [PunRPC]
+    public void ClientCondition(string b)
+    {
+        gameSet.TextClient(b);
     }
 
 

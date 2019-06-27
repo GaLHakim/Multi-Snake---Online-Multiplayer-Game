@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using System.IO;
+using UnityEngine.UI;
 
 public class GameSetup : MonoBehaviour
 {
@@ -14,9 +15,10 @@ public class GameSetup : MonoBehaviour
     public GameObject Master, Client;
 
     public int playerHealthMaster;
-    public int playerDamageMaster;
     public int playerHealthClient;
-    public int playerDamageClient;
+
+    Text ClientText;
+    Text MasterText;
 
     private void OnEnable()
     {
@@ -28,6 +30,9 @@ public class GameSetup : MonoBehaviour
 
     void Start()
     {
+        MasterText = GameObject.Find("mastertext").GetComponent<Text>();
+        ClientText = GameObject.Find("clienttext").GetComponent<Text>();
+
         if (PhotonNetwork.IsMasterClient)
         {
             objectPlayer[0] = PhotonNetwork.Instantiate(objectPlayer[0].name, spawnPlayer[0].transform.position, Quaternion.identity, 0);
@@ -41,6 +46,14 @@ public class GameSetup : MonoBehaviour
         }
     }
 
+    public void TextMaster(string master)
+    {
+        MasterText.text = "" + master;
+    }
+    public void TextClient(string client)
+    {
+        ClientText.text = "" + client;
+    }
     //IEnumerator SingPentingIso()
     //{
     //    yield return new WaitForSeconds(0.01f);

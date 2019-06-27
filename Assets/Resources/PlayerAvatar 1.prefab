@@ -218,9 +218,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc4970ded8b74e44b287b4cb79892bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  xScale: 6
+  yScale: 6
   spawnFood: {fileID: 0}
-  win1: {fileID: 0}
-  win2: {fileID: 0}
   gameSet: {fileID: 0}
 --- !u!58 &511
 CircleCollider2D:

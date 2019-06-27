@@ -40,5 +40,8 @@ MonoBehaviour:
   - addHealth
   - addHealthClient
   - addHealthMaster
+  - Condition
+  - ClientCondition
+  - MasterCondition
   DisableAutoOpenWizard: 1
   ShowSettings: 1
